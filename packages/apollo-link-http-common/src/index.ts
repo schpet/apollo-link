@@ -214,11 +214,9 @@ export const selectHttpOptionsAndBody = (
    */
   configs.forEach(config => {
     options = {
-      ...options,
-      ...config.options,
+      ...(config.options || options),
       headers: {
-        ...options.headers,
-        ...config.headers,
+        ...(config.headers || options.headers),
       },
     };
     if (config.credentials) options.credentials = config.credentials;
