@@ -122,6 +122,7 @@ export const createHttpLink = (linkOptions: HttpLink.Options = {}) => {
         return fromError(parseError);
       }
       chosenURI = newURI;
+      options.headers = removeContentType(options.headers);
     } else {
       try {
         (options as any).body = serializeFetchParameter(body, 'Payload');
@@ -251,6 +252,11 @@ function rewriteURIForGET(chosenURI: string, body: Body) {
   const newURI =
     preFragment + queryParamsPrefix + queryParams.join('&') + fragment;
   return { newURI };
+}
+
+function removeContentType(headers: HttpLink.Options['headers']) {
+  const { ['content-type']: _, ...headersWithoutContentType } = headers;
+  return headersWithoutContentType;
 }
 
 export class HttpLink extends ApolloLink {
